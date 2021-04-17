@@ -1,3 +1,4 @@
+import store from '@/store';
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 const Home = () => import(/* webpackChunkName: "Home" */ '@/views/Home.vue');
@@ -30,9 +31,9 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login,
+    path: '/profile',
+    name: 'Profile',
+    component: Profile,
     meta: {
       routeType: ROUTE_TYPE.NEED_AUTH,
     },
@@ -52,6 +53,32 @@ const router = new VueRouter({
       return { x: 0, y: 0 };
     }
   },
+});
+
+router.beforeEach(async (to, from, next) => {
+  const routeType = to.meta && to.meta.routeType !== undefined ? to.meta.routeType : ROUTE_TYPE.NEED_AUTH;
+
+  if (!store.getters.isLoggedIn) {
+    await store.dispatch('restore');
+  }
+
+  if (routeType === ROUTE_TYPE.PUBLIC) {
+    next();
+    return;
+  }
+
+  if (store.getters.isLoggedIn) {
+    if (routeType === ROUTE_TYPE.NEED_UNAUTH) {
+      next({ name: 'Profile' });
+      return;
+    }
+  } else {
+    if (routeType === ROUTE_TYPE.NEED_AUTH) {
+      next({ name: 'Home' });
+      return;
+    }
+  }
+  next();
 });
 
 export default router;
