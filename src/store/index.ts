@@ -41,12 +41,9 @@ export default new Vuex.Store({
   actions: {
     async restore({ commit }) {
       const session = ls.get<string>('session');
-      console.log(session);
       if (!session) return;
       //Get User From token through server
       const [token, username] = session.split('_');
-      console.log(token);
-      console.log(username);
       commit('setToken', token);
       commit('setUser', username);
     },

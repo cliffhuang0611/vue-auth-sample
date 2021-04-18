@@ -1,24 +1,11 @@
 # vue-auth-sample
 
-## Project setup
-```
-npm install
-```
+## Project Description
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+This is a Vue example of handling a Vue App with pages set behind different levels of Authentication.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+There are public pages that are able to be accessed in any state, pages for only authenticated states, and pages for only unauthenticated states.
 
-### Lints and fixes files
-```
-npm run lint
-```
+The router redirects the user to corresponding pages depending on the current state, and the session token is stored in the Local storage to restore the state when the Vue app is refreshed.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Another example of authentication handling involves the router-view being locked behind a Login Component depending no the authentication state is on /vue-auth-sample-2
