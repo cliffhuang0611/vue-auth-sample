@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import LoginUser from '@/models/LoginModel';
-import * as ls from 'local-storage';
 import router from '@/router';
+import Cookies from 'js-cookie';
 
 Vue.use(Vuex);
 
@@ -40,7 +40,7 @@ export default new Vuex.Store({
   },
   actions: {
     async restore({ commit }) {
-      const session = ls.get<string>('session');
+      const session = Cookies.get('session');
       if (!session) return;
       //Get User From token through server
       const [token, username] = session.split('_');
@@ -49,13 +49,13 @@ export default new Vuex.Store({
     },
     login({ commit }, loginUser: LoginUser) {
       commit('setToken', loginUser.jwt);
-      ls.set<string>('session', loginUser.jwt);
+      Cookies.set('session', loginUser.jwt);
       commit('setUser', loginUser.username);
       router.push({ name: 'Profile' });
     },
     logout({ commit }) {
       commit('setToken', null);
-      ls.set<null>('session', null);
+      Cookies.remove('session');
       router.push({ name: 'Login' });
       commit('setUser', null);
     },
