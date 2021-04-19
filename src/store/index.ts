@@ -40,16 +40,37 @@ export default new Vuex.Store({
   },
   actions: {
     async restore({ commit }) {
-      const session = Cookies.get('session');
-      if (!session) return;
-      //Get User From token through server
-      const [token, username] = session.split('_');
-      commit('setToken', token);
-      commit('setUser', username);
+      //Get token from session storage
+      const ssSession = sessionStorage.getItem('session');
+      if (ssSession) {
+        //Get User From token through server
+        const [token, username] = ssSession.split('_');
+        commit('setToken', token);
+        commit('setUser', username);
+        return;
+      } else {
+        //If not in session storage, try retrieving from local storage
+        const cookiesSession = Cookies.get('session');
+        if (cookiesSession) {
+          //Get User From token through server
+          const [token, username] = cookiesSession.split('_');
+          commit('setToken', token);
+          commit('setUser', username);
+          return;
+        } else {
+          return;
+        }
+      }
     },
     login({ commit }, loginUser: LoginUser) {
       commit('setToken', loginUser.jwt);
       Cookies.set('session', loginUser.jwt);
+      commit('setUser', loginUser.username);
+      router.push({ name: 'Profile' });
+    },
+    sessionStorageLogin({ commit }, loginUser: LoginUser) {
+      commit('setToken', loginUser.jwt);
+      sessionStorage.setItem('session', loginUser.jwt);
       commit('setUser', loginUser.username);
       router.push({ name: 'Profile' });
     },

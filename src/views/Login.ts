@@ -8,6 +8,8 @@ export default class Login extends Vue {
 
   revealPassword = false;
 
+  isKeepLoggedInChecked = false;
+
   loginFailed = false;
   errorMsg = '';
 
@@ -23,7 +25,11 @@ export default class Login extends Vue {
           username: this.username,
           jwt: `helloworld_${this.username}`,
         };
-        this.$store.dispatch('login', loginUser);
+        if (this.isKeepLoggedInChecked) {
+          this.$store.dispatch('login', loginUser);
+        } else {
+          this.$store.dispatch('sessionStorageLogin', loginUser);
+        }
       } else {
         throw new Error('AUTH.DENIED');
       }

@@ -1,21 +1,26 @@
 <template>
   <div>
     <h1 class="header">Login Page</h1>
-    <v-card height="350" width="400" class="login-card">
+    <v-card height="450" width="450" class="login-card">
       <v-form>
         <v-card-title class="justify-center"> Login Form </v-card-title>
         <v-card-text>
-          <v-text-field label="Username" type="text" v-model="username"></v-text-field>
+          <v-text-field ref="username" label="Username" type="text" v-model="username"></v-text-field>
         </v-card-text>
         <v-card-text>
           <v-text-field
+            ref="password"
             label="Password"
             :type="revealPassword ? 'text' : 'password'"
             v-model="password"
             :append-icon="revealPassword ? 'mdi-eye-off' : 'mdi-eye'"
             @click:append="revealPassword = !revealPassword"
+            @keydown.enter="login"
           >
           </v-text-field>
+        </v-card-text>
+        <v-card-text>
+          <v-checkbox label="Keep me logged in" v-model="isKeepLoggedInChecked" />
         </v-card-text>
         <v-card-actions class="justify-center">
           <v-btn color="primary" @click="login">Login</v-btn>
