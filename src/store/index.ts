@@ -77,6 +77,7 @@ export default new Vuex.Store({
     logout({ commit }) {
       commit('setToken', null);
       ls.set<null>('session', null);
+      sessionStorage.removeItem('session');
       router.push({ name: 'Login' });
       commit('setUser', null);
     },
